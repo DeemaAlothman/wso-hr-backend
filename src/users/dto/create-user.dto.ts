@@ -5,7 +5,10 @@ import {
   MinLength,
   IsInt,
   IsBoolean,
+  IsDateString,
+  IsEnum,
 } from 'class-validator';
+import { Gender } from '@prisma/client';
 
 export class CreateUserDto {
   @IsString()
@@ -41,4 +44,36 @@ export class CreateUserDto {
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
+
+  @IsOptional()
+  @IsString()
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  mobile?: string;
+
+  @IsOptional()
+  @IsString()
+  employeeNo?: string;
+
+  @IsOptional()
+  @IsEnum(Gender)
+  gender?: Gender;
+
+  @IsOptional()
+  @IsString()
+  nationality?: string;
+
+  @IsOptional()
+  @IsString()
+  nationalId?: string;
+
+  @IsOptional()
+  @IsDateString()
+  birthDate?: string;
+
+  @IsOptional()
+  @IsDateString()
+  hireDate?: string;
 }

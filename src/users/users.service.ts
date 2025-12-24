@@ -81,6 +81,14 @@ export class UsersService {
       departmentId: user.departmentId,
       department: user.department?.name ?? null,
       position: user.position,
+      phone: user.phone,
+      mobile: user.mobile,
+      employeeNo: user.employeeNo,
+      gender: user.gender,
+      nationality: user.nationality,
+      nationalId: user.nationalId,
+      birthDate: user.birthDate,
+      hireDate: user.hireDate,
       roles: user.roles.map((r) => r.role.code),
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
@@ -98,6 +106,14 @@ export class UsersService {
     });
     if (existsEmail) throw new BadRequestException('email already exists');
 
+    if (dto.departmentId) {
+      const departmentExists = await this.prisma.department.findUnique({
+        where: { id: dto.departmentId },
+      });
+      if (!departmentExists)
+        throw new BadRequestException('Department not found');
+    }
+
     const passwordHash = await bcrypt.hash(dto.password, 10);
 
     const user = await this.prisma.wsoSysUser.create({
@@ -111,6 +127,14 @@ export class UsersService {
         lastName: dto.lastName,
         departmentId: dto.departmentId,
         position: dto.position,
+        phone: dto.phone,
+        mobile: dto.mobile,
+        employeeNo: dto.employeeNo,
+        gender: dto.gender,
+        nationality: dto.nationality,
+        nationalId: dto.nationalId,
+        birthDate: dto.birthDate ? new Date(dto.birthDate) : null,
+        hireDate: dto.hireDate ? new Date(dto.hireDate) : null,
       },
     });
 
@@ -128,17 +152,39 @@ export class UsersService {
       if (existsEmail) throw new BadRequestException('email already exists');
     }
 
+    if (dto.departmentId) {
+      const departmentExists = await this.prisma.department.findUnique({
+        where: { id: dto.departmentId },
+      });
+      if (!departmentExists)
+        throw new BadRequestException('Department not found');
+    }
+
+    const updateData: any = {
+      email: dto.email,
+      displayName: dto.displayName,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      departmentId: dto.departmentId,
+      position: dto.position,
+      isActive: dto.isActive,
+      phone: dto.phone,
+      mobile: dto.mobile,
+      employeeNo: dto.employeeNo,
+      gender: dto.gender,
+      nationality: dto.nationality,
+      nationalId: dto.nationalId,
+      birthDate: dto.birthDate ? new Date(dto.birthDate) : undefined,
+      hireDate: dto.hireDate ? new Date(dto.hireDate) : undefined,
+    };
+
+    if (dto.password) {
+      updateData.passwordHash = await bcrypt.hash(dto.password, 10);
+    }
+
     await this.prisma.wsoSysUser.update({
       where: { id },
-      data: {
-        email: dto.email,
-        displayName: dto.displayName,
-        firstName: dto.firstName,
-        lastName: dto.lastName,
-        departmentId: dto.departmentId,
-        position: dto.position,
-        isActive: dto.isActive,
-      },
+      data: updateData,
     });
 
     return this.getById(id);
