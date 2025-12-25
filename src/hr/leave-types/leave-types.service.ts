@@ -75,20 +75,6 @@ export class LeaveTypesService {
   async update(id: number, dto: UpdateLeaveTypeDto) {
     await this.findOne(id); // Check if exists
 
-    // Check if code conflict (if updating code)
-    if (dto.leaveTypeCode) {
-      const existing = await this.prisma.hrLeaveType.findFirst({
-        where: {
-          leaveTypeCode: dto.leaveTypeCode,
-          NOT: { id },
-        },
-      });
-
-      if (existing) {
-        throw new ConflictException(`Leave type code "${dto.leaveTypeCode}" already exists`);
-      }
-    }
-
     return this.prisma.hrLeaveType.update({
       where: { id },
       data: dto,

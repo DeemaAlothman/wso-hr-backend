@@ -8,6 +8,8 @@ import { RolesModule } from './roles/roles.module';
 import { ActivityLogsModule } from './activity-logs/activity-logs.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { LeaveTypesModule } from './hr/leave-types.module';
+import { LeaveBalanceModule } from './hr/leave-balance.module';
+import { LeaveRequestsModule } from './hr/leave-requests.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { LeaveTypesModule } from './hr/leave-types.module';
     ActivityLogsModule,
     NotificationsModule,
     LeaveTypesModule,
+    LeaveBalanceModule,
+    LeaveRequestsModule,
   ],
 })
 export class AppModule {}
