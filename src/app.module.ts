@@ -10,6 +10,8 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { LeaveTypesModule } from './hr/leave-types.module';
 import { LeaveBalanceModule } from './hr/leave-balance.module';
 import { LeaveRequestsModule } from './hr/leave-requests.module';
+import { AnnualHolidaysModule } from './hr/annual-holidays.module';
+import { ReportsModule } from './hr/reports.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { LeaveRequestsModule } from './hr/leave-requests.module';
     LeaveTypesModule,
     LeaveBalanceModule,
     LeaveRequestsModule,
+    AnnualHolidaysModule,
+    ReportsModule,
   ],
 })
 export class AppModule {}

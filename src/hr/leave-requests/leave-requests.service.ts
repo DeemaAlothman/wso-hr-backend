@@ -290,7 +290,25 @@ export class LeaveRequestsService {
     );
 
     if (!hasBalance) {
-      throw new BadRequestException('Insufficient leave balance');
+      // Get actual balance for better error message
+      const currentYear = new Date().getFullYear();
+      const balance = await this.prisma.hrLeaveBalance.findFirst({
+        where: {
+          userId,
+          leaveTypeId: dto.leaveTypeId,
+          year: currentYear,
+        },
+      });
+
+      if (!balance) {
+        throw new BadRequestException(
+          `No leave balance found for this leave type in ${currentYear}. Please contact HR to initialize your balance.`,
+        );
+      }
+
+      throw new BadRequestException(
+        `Insufficient leave balance. Available: ${balance.remainingBalance} days, Requested: ${totalDays} days`,
+      );
     }
 
     // Get user's manager
